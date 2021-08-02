@@ -1,0 +1,48 @@
+<html>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th colspan="7">Overall</th>
+          <th colspan="7">Women</th>
+          <th colspan="7">Men</th>
+        </tr>
+        <tr>
+          <th>Team</th>
+          <th><abbr title="Played">P</abbr></th>
+
+          <th><abbr title="Won">W</abbr></th>
+          <th><abbr title="Lost">L</abbr></th>
+          <th><abbr title="Tied">T</abbr></th>
+          <th><abbr title="No result">NR</abbr></th>
+          <th><abbr title="Points">Pts</abbr></th>
+          <th><abbr title="Net run rate">NRR</abbr></th>
+
+          <th><abbr title="Played">P</abbr></th>
+          <th><abbr title="Won">W</abbr></th>
+          <th><abbr title="Lost">L</abbr></th>
+          <th><abbr title="Tied">T</abbr></th>
+          <th><abbr title="No result">NR</abbr></th>
+          <th><abbr title="Points">Pts</abbr></th>
+          <th><abbr title="Net run rate">NRR</abbr></th>
+
+          <th><abbr title="Played">P</abbr></th>
+          <th><abbr title="Won">W</abbr></th>
+          <th><abbr title="Lost">L</abbr></th>
+          <th><abbr title="Tied">T</abbr></th>
+          <th><abbr title="No result">NR</abbr></th>
+          <th><abbr title="Points">Pts</abbr></th>
+          <th><abbr title="Net run rate">NRR</abbr></th>
+        </tr>
+      </thead>
+      <tbody>
+        {{ range .Rows }}
+        <tr>
+          <td>{{ .Team }}</td>
+        </tr>
+        {{ end }}
+      </tbody>
+    </table>
+  </body>
+</html>
