@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/patrickmn/go-cache"
 	"golang.org/x/net/html"
 	"html/template"
 	"log"
@@ -11,17 +12,16 @@ import (
 	"sort"
 	"strconv"
 	"strings"
-	"github.com/patrickmn/go-cache"
 	"time"
 )
 
 const userAgent = "https://sean.mcgivern.me.uk/the-hundred-combined-table/"
-const defaultExpiration = 10*time.Minute
+const defaultExpiration = 10 * time.Minute
 
 var c *cache.Cache
 
 type Table struct {
-	Rows Rows
+	Rows        Rows
 	GeneratedAt string
 }
 
@@ -277,7 +277,7 @@ func table(c *cache.Cache) func(w http.ResponseWriter, r *http.Request) {
 		rows, expires := getRows(c)
 
 		template.Execute(w, Table{
-			Rows: rows,
+			Rows:        rows,
 			GeneratedAt: expires.Add(defaultExpiration * -1).Format("2006-01-02 15:04:05 MST"),
 		})
 	}
