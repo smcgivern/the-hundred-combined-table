@@ -40,6 +40,27 @@
         {{ range .Rows }}
         <tr>
           <td>{{ .Team }}</td>
+          <td>{{ .Combined.Played }}</td>
+          <td>{{ .Combined.Won }}</td>
+          <td>{{ .Combined.Lost }}</td>
+          <td>{{ .Combined.Tied }}</td>
+          <td>{{ .Combined.NoResult }}</td>
+          <td>{{ .Combined.Points }}</td>
+          <td>{{ .Combined.NetRunRate | printf "%.3f" }}</td>
+          <td>{{ .Women.Played }}</td>
+          <td>{{ .Women.Won }}</td>
+          <td>{{ .Women.Lost }}</td>
+          <td>{{ .Women.Tied }}</td>
+          <td>{{ .Women.NoResult }}</td>
+          <td>{{ .Women.Points }}</td>
+          <td>{{ .Women.NetRunRate | printf "%.3f" }}</td>
+          <td>{{ .Men.Played }}</td>
+          <td>{{ .Men.Won }}</td>
+          <td>{{ .Men.Lost }}</td>
+          <td>{{ .Men.Tied }}</td>
+          <td>{{ .Men.NoResult }}</td>
+          <td>{{ .Men.Points }}</td>
+          <td>{{ .Men.NetRunRate | printf "%.3f" }}</td>
         </tr>
         {{ end }}
       </tbody>
