@@ -1,6 +1,81 @@
+<!DOCTYPE html>
 <html>
+  <head>
+    <title>The Hundred combined table</title>
+    <style type="text/css">
+      body, input {
+        font-family: "Palatino Linotype", "Palatino", "URW Palladio L", "Book Antiqua", "Baskerville", "Bitstream Charter", "Garamond", "Georgia", serif;
+        font-size: 105%;
+        color: #000;
+        background: #fff;
+      }
+
+      body {
+        line-height: 1.6;
+        width: 50em;
+        margin: 0em auto;
+      }
+
+      h1, h2, h3, h4, h5, h6 {
+        font-family: "Gill Sans", "Gill Sans MT", "GillSans", "Calibri", "Trebuchet MS", sans-serif;
+        text-align: center;
+        font-weight: normal;
+      }
+
+      :link,:link:active,:link:hover, .click {
+        color: #0000ff;
+        background: transparent;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      :link:visited {
+        color: #800080;
+        background: transparent;
+      }
+
+      table {
+        margin-left: auto;
+        margin-right: auto;
+        border-collapse: collapse;
+      }
+
+      table, thead {
+        border: 1px solid black;
+      }
+
+      tbody th {
+        text-align: left;
+      }
+
+      td {
+        min-width: 2em;
+        margin: 0;
+        padding: 0.2em;
+        text-align: right;
+      }
+
+      .overall, .men {
+        background: #eee;
+      }
+
+      #byline {
+        clear: both;
+        text-align: right;
+        font-size: 75%;
+        font-style: italic;
+      }
+    </style>
+  </head>
   <body>
+    <h1>The Hundred combined table</h1>
     <table>
+      <colgroup>
+        <col class="team">
+        <col span="7" class="overall">
+        <col span="7" class="women">
+        <col span="7" class="men">
+      </colgroup>
       <thead>
         <tr>
           <th></th>
@@ -39,7 +114,7 @@
       <tbody>
         {{ range .Rows }}
         <tr>
-          <td>{{ .Team }}</td>
+          <th>{{ .Team }}</th>
           <td>{{ .Combined.Played }}</td>
           <td>{{ .Combined.Won }}</td>
           <td>{{ .Combined.Lost }}</td>
@@ -65,5 +140,39 @@
         {{ end }}
       </tbody>
     </table>
+    <p>
+      This is a table for <a href="https://www.thehundred.com/home">The
+      Hundred</a> based on an
+      idea <a href="https://twitter.com/henrymoeranBBC">Henry Moeran</a>
+      mentioned
+      on <a href="https://finalwordcricket.com/2021/07/30/season-10-ep-14-betting-the-house-on-the-hundred/">The
+      Final Word cricket podcast</a>: as the tournament has combined
+      organisations for the men's and women's teams, why not make a
+      combined table and have the top teams in that qualify for the
+      finals?
+    </p>
+    <details>
+      <summary>Technical details</summary>
+
+      <p>
+        This is a small Go application that gets the table data from
+        Cricinfo's <a href="https://www.espncricinfo.com/series/the-hundred-women-s-competition-2021-1252659/points-table-standings">women's</a>
+        and <a href="https://www.espncricinfo.com/series/the-hundred-men-s-competition-2021-1252040/points-table-standings">men's</a>
+        tables. Points and net run rate are calculated based on match
+        results from those tables, but further tie-breakers (in
+        particular, head-to-head results) are not implemented.
+      </p>
+
+      <p>
+        The <a href="https://github.com/smcgivern/the-hundred-combined-table">source
+        is on GitHub</a>.
+      </p>
+    </details>
+    <div id="byline">
+      <p>
+        By
+        <a href="http://sean.mcgivern.me.uk/">Sean McGivern</a>
+      </p>
+    </div>
   </body>
 </html>
