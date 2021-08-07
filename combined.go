@@ -11,12 +11,18 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"github.com/patrickmn/go-cache"
+	"time"
 )
 
 const userAgent = "https://sean.mcgivern.me.uk/the-hundred-combined-table/"
+const defaultExpiration = 10*time.Minute
+
+var c *cache.Cache
 
 type Table struct {
 	Rows Rows
+	GeneratedAt string
 }
 
 type Rows []Row
@@ -231,8 +237,13 @@ func parseNrr(nrr string) (int, float64) {
 	return runs, overs
 }
 
-func main() {
-	template := template.Must(template.New("index.html").ParseFiles("template/index.html"))
+func getRows(c *cache.Cache) (Rows, time.Time) {
+	key := "Rows"
+	fromCache, expires, found := c.GetWithExpiration(key)
+
+	if found {
+		return fromCache.(Rows), expires
+	}
 
 	women := getRowSections("https://www.espncricinfo.com/series/the-hundred-women-s-competition-2021-1252659/points-table-standings")
 	men := getRowSections("https://www.espncricinfo.com/series/the-hundred-men-s-competition-2021-1252040/points-table-standings")
@@ -248,7 +259,40 @@ func main() {
 
 	sort.Sort(rows)
 
-	template.Execute(os.Stdout, Table{
-		Rows: rows,
+	c.Set(key, rows, defaultExpiration)
+
+	return rows, time.Now().Add(defaultExpiration)
+}
+
+func logRequests(handler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)
+		handler.ServeHTTP(w, r)
 	})
+}
+
+func table(c *cache.Cache) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		template := template.Must(template.New("index.html").ParseFiles("template/index.html"))
+		rows, expires := getRows(c)
+
+		template.Execute(w, Table{
+			Rows: rows,
+			GeneratedAt: expires.Add(defaultExpiration * -1).Format("2006-01-02 15:04:05"),
+		})
+	}
+}
+
+func main() {
+	c = cache.New(defaultExpiration, 5*time.Minute)
+
+	port, exists := os.LookupEnv("PORT")
+
+	if !exists {
+		port = "8080"
+	}
+
+	http.HandleFunc("/", table(c))
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), logRequests(http.DefaultServeMux)))
 }
