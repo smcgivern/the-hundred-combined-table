@@ -278,7 +278,7 @@ func table(c *cache.Cache) func(w http.ResponseWriter, r *http.Request) {
 
 		template.Execute(w, Table{
 			Rows: rows,
-			GeneratedAt: expires.Add(defaultExpiration * -1).Format("2006-01-02 15:04:05"),
+			GeneratedAt: expires.Add(defaultExpiration * -1).Format("2006-01-02 15:04:05 MST"),
 		})
 	}
 }
