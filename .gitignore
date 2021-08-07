@@ -1,0 +1,6 @@
+# Configuration
+*.mk
+
+# Build artifacts
+the-hundred-combined-table
+the-hundred-combined-table-linux
