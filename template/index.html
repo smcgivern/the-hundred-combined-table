@@ -34,14 +34,25 @@
         background: transparent;
       }
 
+      .outer {
+        display: flex;
+        justify-content: center;
+      }
+
       table {
         margin-left: auto;
         margin-right: auto;
         border-collapse: collapse;
+        height: 100%;
+        display: inline-block;
       }
 
-      table, thead {
+      table {
         border: 1px solid black;
+      }
+
+      thead {
+        border-bottom: 1px solid black;
       }
 
       tbody th {
@@ -69,77 +80,79 @@
   </head>
   <body>
     <h1>The Hundred combined table</h1>
-    <table>
-      <colgroup>
-        <col class="team">
-        <col span="7" class="overall">
-        <col span="7" class="women">
-        <col span="7" class="men">
-      </colgroup>
-      <thead>
-        <tr>
-          <th></th>
-          <th colspan="7">Overall</th>
-          <th colspan="7">Women</th>
-          <th colspan="7">Men</th>
-        </tr>
-        <tr>
-          <th>Team</th>
-          <th><abbr title="Played">P</abbr></th>
+    <div class="outer">
+      <table>
+        <colgroup>
+          <col class="team">
+          <col span="7" class="overall">
+          <col span="7" class="women">
+          <col span="7" class="men">
+        </colgroup>
+        <thead>
+          <tr>
+            <th></th>
+            <th colspan="7">Overall</th>
+            <th colspan="7">Women</th>
+            <th colspan="7">Men</th>
+          </tr>
+          <tr>
+            <th>Team</th>
+            <th><abbr title="Played">P</abbr></th>
 
-          <th><abbr title="Won">W</abbr></th>
-          <th><abbr title="Lost">L</abbr></th>
-          <th><abbr title="Tied">T</abbr></th>
-          <th><abbr title="No result">NR</abbr></th>
-          <th><abbr title="Points">Pts</abbr></th>
-          <th><abbr title="Net run rate">NRR</abbr></th>
+            <th><abbr title="Won">W</abbr></th>
+            <th><abbr title="Lost">L</abbr></th>
+            <th><abbr title="Tied">T</abbr></th>
+            <th><abbr title="No result">NR</abbr></th>
+            <th><abbr title="Points">Pts</abbr></th>
+            <th><abbr title="Net run rate">NRR</abbr></th>
 
-          <th><abbr title="Played">P</abbr></th>
-          <th><abbr title="Won">W</abbr></th>
-          <th><abbr title="Lost">L</abbr></th>
-          <th><abbr title="Tied">T</abbr></th>
-          <th><abbr title="No result">NR</abbr></th>
-          <th><abbr title="Points">Pts</abbr></th>
-          <th><abbr title="Net run rate">NRR</abbr></th>
+            <th><abbr title="Played">P</abbr></th>
+            <th><abbr title="Won">W</abbr></th>
+            <th><abbr title="Lost">L</abbr></th>
+            <th><abbr title="Tied">T</abbr></th>
+            <th><abbr title="No result">NR</abbr></th>
+            <th><abbr title="Points">Pts</abbr></th>
+            <th><abbr title="Net run rate">NRR</abbr></th>
 
-          <th><abbr title="Played">P</abbr></th>
-          <th><abbr title="Won">W</abbr></th>
-          <th><abbr title="Lost">L</abbr></th>
-          <th><abbr title="Tied">T</abbr></th>
-          <th><abbr title="No result">NR</abbr></th>
-          <th><abbr title="Points">Pts</abbr></th>
-          <th><abbr title="Net run rate">NRR</abbr></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{ range .Rows }}
-        <tr>
-          <th>{{ .Team }}</th>
-          <td>{{ .Combined.Played }}</td>
-          <td>{{ .Combined.Won }}</td>
-          <td>{{ .Combined.Lost }}</td>
-          <td>{{ .Combined.Tied }}</td>
-          <td>{{ .Combined.NoResult }}</td>
-          <td>{{ .Combined.Points }}</td>
-          <td>{{ .Combined.NetRunRate | printf "%.3f" }}</td>
-          <td>{{ .Women.Played }}</td>
-          <td>{{ .Women.Won }}</td>
-          <td>{{ .Women.Lost }}</td>
-          <td>{{ .Women.Tied }}</td>
-          <td>{{ .Women.NoResult }}</td>
-          <td>{{ .Women.Points }}</td>
-          <td>{{ .Women.NetRunRate | printf "%.3f" }}</td>
-          <td>{{ .Men.Played }}</td>
-          <td>{{ .Men.Won }}</td>
-          <td>{{ .Men.Lost }}</td>
-          <td>{{ .Men.Tied }}</td>
-          <td>{{ .Men.NoResult }}</td>
-          <td>{{ .Men.Points }}</td>
-          <td>{{ .Men.NetRunRate | printf "%.3f" }}</td>
-        </tr>
-        {{ end }}
-      </tbody>
-    </table>
+            <th><abbr title="Played">P</abbr></th>
+            <th><abbr title="Won">W</abbr></th>
+            <th><abbr title="Lost">L</abbr></th>
+            <th><abbr title="Tied">T</abbr></th>
+            <th><abbr title="No result">NR</abbr></th>
+            <th><abbr title="Points">Pts</abbr></th>
+            <th><abbr title="Net run rate">NRR</abbr></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .Rows }}
+          <tr>
+            <th>{{ .Team }}</th>
+            <td>{{ .Combined.Played }}</td>
+            <td>{{ .Combined.Won }}</td>
+            <td>{{ .Combined.Lost }}</td>
+            <td>{{ .Combined.Tied }}</td>
+            <td>{{ .Combined.NoResult }}</td>
+            <td>{{ .Combined.Points }}</td>
+            <td>{{ .Combined.NetRunRate | printf "%.3f" }}</td>
+            <td>{{ .Women.Played }}</td>
+            <td>{{ .Women.Won }}</td>
+            <td>{{ .Women.Lost }}</td>
+            <td>{{ .Women.Tied }}</td>
+            <td>{{ .Women.NoResult }}</td>
+            <td>{{ .Women.Points }}</td>
+            <td>{{ .Women.NetRunRate | printf "%.3f" }}</td>
+            <td>{{ .Men.Played }}</td>
+            <td>{{ .Men.Won }}</td>
+            <td>{{ .Men.Lost }}</td>
+            <td>{{ .Men.Tied }}</td>
+            <td>{{ .Men.NoResult }}</td>
+            <td>{{ .Men.Points }}</td>
+            <td>{{ .Men.NetRunRate | printf "%.3f" }}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </div>
     <p>
       This is a table for <a href="https://www.thehundred.com/home">The
       Hundred</a> based on an
