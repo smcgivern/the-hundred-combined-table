@@ -1,5 +1,6 @@
 # Configuration
 *.mk
+*.service
 
 # Build artifacts
 the-hundred-combined-table
