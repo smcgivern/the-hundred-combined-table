@@ -86,20 +86,18 @@ func (s RowSection) NetRunRate() float64 {
 // Yeah :-(
 type CricinfoJson struct {
 	Props struct {
-		PageProps struct {
+		AppPageProps struct {
 			Data struct {
-				PageData struct {
-					Content struct {
-						Standings struct {
-							Groups []struct {
-								Name      string     `json:"name"`
-								TeamStats []TeamStat `json:"teamStats"`
-							} `json:"groups"`
-						} `json:"standings"`
-					} `json:"content"`
-				} `json:"pageData"`
+				Content struct {
+					Standings struct {
+						Groups []struct {
+							Name      string     `json:"name"`
+							TeamStats []TeamStat `json:"teamStats"`
+						} `json:"groups"`
+					} `json:"standings"`
+				} `json:"content"`
 			} `json:"data"`
-		} `json:"pageProps"`
+		} `json:"appPageProps"`
 	} `json:"props"`
 }
 
@@ -185,7 +183,7 @@ func getRowSections(url string) map[string]RowSection {
 		log.Fatal(err)
 	}
 
-	teamStats := results.Props.PageProps.Data.PageData.Content.Standings.Groups[0].TeamStats
+	teamStats := results.Props.AppPageProps.Data.Content.Standings.Groups[0].TeamStats
 
 	for i := range teamStats {
 		stats := teamStats[i]
