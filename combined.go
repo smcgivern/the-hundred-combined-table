@@ -17,14 +17,54 @@ import (
 
 const userAgent = "https://sean.mcgivern.me.uk/the-hundred-combined-table/"
 const defaultExpiration = 10 * time.Minute
+const currentYear = "2022"
 const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2022-1299144/points-table-standings"
 const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2022-1299141/points-table-standings"
 
 var c *cache.Cache
 
+var previousYears = map[string]Rows{
+	"2021": []Row{
+		Row{"Brave",
+			RowSection{8, 7, 1, 0, 0, 933, 138, 850, 149},
+			RowSection{8, 5, 2, 0, 1, 983, 134.8, 990, 136.4},
+		},
+		Row{"Phoenix",
+			RowSection{8, 4, 4, 0, 0, 1051, 154, 1029, 155},
+			RowSection{8, 6, 2, 0, 0, 1202, 147.8, 1085, 154},
+		},
+		Row{"Invincibles",
+			RowSection{8, 4, 3, 0, 1, 801, 136.4, 820, 140},
+			RowSection{8, 4, 3, 0, 1, 975, 130.6, 956, 130.2},
+		},
+		Row{"Rockets",
+			RowSection{8, 3, 4, 0, 1, 878, 138.4, 904, 136.2},
+			RowSection{8, 5, 3, 0, 0, 1070, 145.2, 1084, 147.8},
+		},
+		Row{"N S-Chargers",
+			RowSection{8, 3, 4, 0, 1, 862, 132, 849, 129.2},
+			RowSection{8, 3, 4, 0, 1, 1054, 139.4, 935, 132.6},
+		},
+		Row{"Originals",
+			RowSection{8, 3, 4, 0, 1, 823, 128.6, 835, 130.8},
+			RowSection{8, 2, 4, 0, 2, 780, 113.6, 860, 119},
+		},
+		Row{"Spirit",
+			RowSection{8, 4, 4, 0, 0, 934, 150, 963, 155.8},
+			RowSection{8, 1, 6, 0, 1, 944, 140, 1019, 138},
+		},
+		Row{"Fire",
+			RowSection{8, 2, 6, 0, 0, 927, 157.6, 959, 139},
+			RowSection{8, 3, 5, 0, 0, 1148, 159.6, 1227, 153},
+		},
+	},
+}
+
 type Table struct {
-	Rows        Rows
-	GeneratedAt string
+	Rows          Rows
+	GeneratedAt   string
+	PreviousYears map[string]Rows
+	Year          string
 }
 
 type Rows []Row
@@ -273,12 +313,28 @@ func logRequests(handler http.Handler) http.Handler {
 
 func table(c *cache.Cache) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		year := r.FormValue("year")
 		template := template.Must(template.New("index.html").ParseFiles("template/index.html"))
-		rows, expires := getRows(c)
+
+		var rows Rows
+		var generatedAt string
+
+		if year == "" {
+			var expires time.Time
+
+			rows, expires = getRows(c)
+			generatedAt = expires.Add(defaultExpiration * -1).Format("2006-01-02 15:04:05 MST")
+			year = currentYear
+		} else {
+			rows = previousYears[year]
+			generatedAt = ""
+		}
 
 		template.Execute(w, Table{
-			Rows:        rows,
-			GeneratedAt: expires.Add(defaultExpiration * -1).Format("2006-01-02 15:04:05 MST"),
+			Rows:          rows,
+			GeneratedAt:   generatedAt,
+			PreviousYears: previousYears,
+			Year:          year,
 		})
 	}
 }

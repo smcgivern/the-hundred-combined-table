@@ -80,6 +80,7 @@
   </head>
   <body>
     <h1>The Hundred combined table</h1>
+    <h2>{{ .Year }}</h2>
     <div class="outer">
       <table>
         <colgroup>
@@ -164,9 +165,16 @@
       combined table and have the top teams in that qualify for the
       finals?
     </p>
+    {{ if .GeneratedAt }}
     <p>
       Generated at {{ .GeneratedAt }}.
     </p>
+    {{ end }}
+    <p>
+      <a href=".">Current year</a>
+      {{ range $year, $_ := .PreviousYears }}
+      / <a href="?year={{ $year }}">{{ $year }}</a>
+      {{ end }}
     <details>
       <summary>Technical details</summary>
 
