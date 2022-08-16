@@ -17,6 +17,8 @@ import (
 
 const userAgent = "https://sean.mcgivern.me.uk/the-hundred-combined-table/"
 const defaultExpiration = 10 * time.Minute
+const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2022-1299144/points-table-standings"
+const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2022-1299141/points-table-standings"
 
 var c *cache.Cache
 
@@ -243,8 +245,8 @@ func getRows(c *cache.Cache) (Rows, time.Time) {
 		return fromCache.(Rows), expires
 	}
 
-	women := getRowSections("https://www.espncricinfo.com/series/the-hundred-women-s-competition-2021-1252659/points-table-standings")
-	men := getRowSections("https://www.espncricinfo.com/series/the-hundred-men-s-competition-2021-1252040/points-table-standings")
+	women := getRowSections(womensTable)
+	men := getRowSections(mensTable)
 
 	rows := make(Rows, 0)
 	for team, womenRow := range women {
