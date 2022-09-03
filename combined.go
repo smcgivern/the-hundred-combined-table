@@ -350,5 +350,5 @@ func main() {
 
 	http.HandleFunc("/", table(c))
 
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), logRequests(http.DefaultServeMux)))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("localhost:%s", port), logRequests(http.DefaultServeMux)))
 }
