@@ -171,10 +171,10 @@
     </p>
     {{ end }}
     <p>
-      <a href=".">Current year</a>
       {{ range $year, $_ := .PreviousYears }}
-      / <a href="?year={{ $year }}">{{ $year }}</a>
+      <a href="?year={{ $year }}">{{ $year }}</a> /
       {{ end }}
+      <a href=".">Current year</a>
     <details>
       <summary>Technical details</summary>
 
