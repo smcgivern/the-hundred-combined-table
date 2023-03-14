@@ -1,3 +1,5 @@
+.direnv
+
 # Configuration
 *.mk
 *.service
