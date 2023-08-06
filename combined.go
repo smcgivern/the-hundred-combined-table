@@ -17,9 +17,9 @@ import (
 
 const userAgent = "https://sean.mcgivern.me.uk/the-hundred-combined-table/"
 const defaultExpiration = 10 * time.Minute
-const currentYear = "2022"
-const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2022-1299144/points-table-standings"
-const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2022-1299141/points-table-standings"
+const currentYear = "2023"
+const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2023-1355568/points-table-standings"
+const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2023-1355567/points-table-standings"
 
 var c *cache.Cache
 
