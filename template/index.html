@@ -180,11 +180,11 @@
 
       <p>
         This is a small Go application that gets the table data from
-        Cricinfo's <a href="https://www.espncricinfo.com/series/the-hundred-women-s-competition-2021-1252659/points-table-standings">women's</a>
-        and <a href="https://www.espncricinfo.com/series/the-hundred-men-s-competition-2021-1252040/points-table-standings">men's</a>
-        tables. Points and net run rate are calculated based on match
-        results from those tables, but further tie-breakers (in
-        particular, head-to-head results) are not implemented.
+        Cricinfo's <a href="{{ .WomensTable }}">women's</a> and <a
+        href="{{ .MensTable }}">men's</a> tables. Points and net run
+        rate are calculated based on match results from those tables,
+        but further tie-breakers (in particular, head-to-head results)
+        are not implemented.
       </p>
 
       <p>

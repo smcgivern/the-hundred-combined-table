@@ -133,6 +133,8 @@ type Table struct {
 	GeneratedAt   string
 	PreviousYears map[string]Rows
 	Year          string
+	WomensTable   string
+	MensTable     string
 }
 
 type Rows []Row
@@ -407,6 +409,8 @@ func table(c *cache.Cache) func(w http.ResponseWriter, r *http.Request) {
 			GeneratedAt:   generatedAt,
 			PreviousYears: previousYears,
 			Year:          year,
+			WomensTable:   womensTable,
+			MensTable:     mensTable,
 		})
 	}
 }
