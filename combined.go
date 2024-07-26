@@ -322,6 +322,10 @@ func getRowSections(url string) map[string]RowSection {
 }
 
 func parseNrr(nrr string) (int, float64) {
+	if (nrr == "") {
+		return 0, 0
+	}
+
 	split := strings.Split(nrr, "/")
 
 	runs, err := strconv.Atoi(split[0])
