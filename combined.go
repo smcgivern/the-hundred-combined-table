@@ -15,15 +15,50 @@ import (
 	"time"
 )
 
-const userAgent = "https://sean.mcgivern.me.uk/the-hundred-combined-table/"
+const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15"
+// https://sean.mcgivern.me.uk/the-hundred-combined-table/"
 const defaultExpiration = 10 * time.Minute
-const currentYear = "2024"
-const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2024-1417780/points-table-standings"
-const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2024-1417778/points-table-standings"
+const currentYear = "2025"
+const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2025-1471001/points-table-standings"
+const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2025-1471000/points-table-standings"
 
 var c *cache.Cache
 
 var previousYears = map[string]Rows{
+	"2024": []Row{
+		Row{"Invincibles",
+			RowSection{8, 5, 2, 1, 0, 867, 146.2, 901, 152.8},
+			RowSection{8, 6, 2, 0, 0, 1013, 143.4, 980, 158.8},
+		},
+		Row{"N S-Chargers",
+			RowSection{8, 3, 3, 1, 1, 835, 140, 689, 137.2},
+			RowSection{8, 5, 2, 0, 1, 900, 125.2, 891, 116.6},
+		},
+		Row{"Phoenix",
+			RowSection{8, 3, 4, 0, 1, 795, 140, 895, 139.4},
+			RowSection{8, 6, 2, 0, 0, 892, 129.2, 909, 139.8},
+		},
+		Row{"Fire",
+			RowSection{8, 5, 2, 0, 1, 821, 130.6, 819, 137.6},
+			RowSection{8, 2, 4, 0, 2, 656, 111.4, 708, 116},
+		},
+		Row{"Rockets",
+			RowSection{8, 4, 4, 0, 0, 1043, 159.4, 972, 158.4},
+			RowSection{8, 4, 4, 0, 0, 1148, 158.8, 1090, 158.4},
+		},
+		Row{"Brave",
+			RowSection{8, 1, 6, 1, 0, 911, 152.8, 961, 144.8},
+			RowSection{8, 5, 2, 0, 1, 955, 133.2, 881, 134},
+		},
+		Row{"Spirit",
+			RowSection{8, 4, 3, 1, 0, 1030, 155, 1032, 157.2},
+			RowSection{8, 1, 7, 0, 0, 884, 146.2, 976, 139},
+		},
+		Row{"Originals",
+			RowSection{8, 3, 4, 0, 1, 870, 139.6, 903, 136.2},
+			RowSection{8, 1, 7, 0, 0, 988, 146, 1001, 130.8},
+		},
+	},
 	"2023": []Row{
 		Row{"Brave",
 			RowSection{8, 7, 1, 0, 0, 1058, 147.4, 1020, 157},
@@ -200,14 +235,16 @@ type CricinfoJson struct {
 	Props struct {
 		AppPageProps struct {
 			Data struct {
-				Content struct {
-					Standings struct {
-						Groups []struct {
-							Name      string     `json:"name"`
-							TeamStats []TeamStat `json:"teamStats"`
-						} `json:"groups"`
-					} `json:"standings"`
-				} `json:"content"`
+				Data struct {
+					Content struct {
+						Standings struct {
+							Groups []struct {
+								Name      string     `json:"name"`
+								TeamStats []TeamStat `json:"teamStats"`
+							} `json:"groups"`
+						} `json:"standings"`
+					} `json:"content"`
+				} `json:"data"`
 			} `json:"data"`
 		} `json:"appPageProps"`
 	} `json:"props"`
@@ -248,6 +285,8 @@ func getTableJson(url string) string {
 	}
 
 	req.Header.Set("User-Agent", userAgent)
+	req.Header.Set("Accept-Encoding", "identity")
+	req.Header.Set("Accept", "*/*")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -281,6 +320,7 @@ func getTableJson(url string) string {
 			}
 		}
 	}
+
 	f(doc)
 
 	return ret
@@ -295,7 +335,7 @@ func getRowSections(url string) map[string]RowSection {
 		log.Fatal(err)
 	}
 
-	teamStats := results.Props.AppPageProps.Data.Content.Standings.Groups[0].TeamStats
+	teamStats := results.Props.AppPageProps.Data.Data.Content.Standings.Groups[0].TeamStats
 
 	for i := range teamStats {
 		stats := teamStats[i]
