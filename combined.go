@@ -6,6 +6,7 @@ import (
 	"github.com/patrickmn/go-cache"
 	"golang.org/x/net/html"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -16,11 +17,12 @@ import (
 )
 
 const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15"
-// https://sean.mcgivern.me.uk/the-hundred-combined-table/"
-const defaultExpiration = 10 * time.Minute
+const defaultExpiration = 60 * time.Minute
 const currentYear = "2025"
 const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2025-1471001/points-table-standings"
 const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2025-1471000/points-table-standings"
+
+var apifyToken, _ = os.LookupEnv("APIFY_TOKEN")
 
 var c *cache.Cache
 
@@ -278,26 +280,77 @@ func innerText(n *html.Node) (string, bool) {
 }
 
 func getTableJson(url string) string {
-	client := http.Client{}
-	req, err := http.NewRequest(http.MethodGet, url, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	var body io.Reader
+	if apifyToken != "" {
+		payload := `{
+			"pageFunction": "async function pageFunction(context) { return { body: context.body }; }",
+			"startUrls": [{"url": "` + url + `"}]
+		}`
 
-	req.Header.Set("User-Agent", userAgent)
-	req.Header.Set("Accept-Encoding", "identity")
-	req.Header.Set("Accept", "*/*")
+		runURL := fmt.Sprintf(
+			"https://api.apify.com/v2/acts/dEPdhrIdSGVcXvISz/run-sync?token=%s&timeout=60&outputRecordKey=body",
+			apifyToken,
+		)
 
-	res, err := client.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
+		resp, err := http.Post(runURL, "application/json", strings.NewReader(payload))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp.Body.Close()
 
-	if res.Body != nil {
+		if resp.StatusCode >= 300 {
+			bodyBytes, _ := io.ReadAll(resp.Body)
+			log.Fatal(fmt.Errorf("actor run failed: %d %s", resp.StatusCode, string(bodyBytes)))
+		}
+
+		dataURL := fmt.Sprintf(
+			"https://api.apify.com/v2/acts/dEPdhrIdSGVcXvISz/runs/last/dataset/items?actorTaskId=dEPdhrIdSGVcXvISz&token=%s",
+			apifyToken,
+		)
+
+		resp2, err := http.Get(dataURL)
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer resp2.Body.Close()
+
+		var dataset []map[string]interface{}
+		if err := json.NewDecoder(resp2.Body).Decode(&dataset); err != nil {
+			log.Fatal(err)
+		}
+
+		if len(dataset) == 0 {
+			log.Fatal(fmt.Errorf("empty dataset"))
+		}
+
+		bodyStr, ok := dataset[0]["body"].(string)
+		if !ok {
+			log.Fatal(fmt.Errorf("missing body in dataset"))
+		}
+
+		body = strings.NewReader(bodyStr)
+	} else {
+
+		client := http.Client{}
+		req, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		req.Header.Set("User-Agent", userAgent)
+		req.Header.Set("Accept-Encoding", "identity")
+		req.Header.Set("Accept", "*/*")
+
+		res, err := client.Do(req)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		body = res.Body
 		defer res.Body.Close()
 	}
 
-	doc, err := html.Parse(res.Body)
+	doc, err := html.Parse(body)
 	if err != nil {
 		log.Fatal(err)
 	}
