@@ -18,9 +18,9 @@ import (
 
 const userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15"
 const defaultExpiration = 60 * time.Minute
-const currentYear = "2025"
-const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2025-1471001/points-table-standings"
-const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2025-1471000/points-table-standings"
+const currentYear = "2026"
+const womensTable = "https://www.espncricinfo.com/series/the-hundred-women-s-competition-2026-1521193/points-table-standings"
+const mensTable = "https://www.espncricinfo.com/series/the-hundred-men-s-competition-2026-1521176/points-table-standings"
 
 var apifyToken, _ = os.LookupEnv("APIFY_TOKEN")
 
