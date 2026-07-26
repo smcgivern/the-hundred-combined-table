@@ -27,6 +27,40 @@ var apifyToken, _ = os.LookupEnv("APIFY_TOKEN")
 var c *cache.Cache
 
 var previousYears = map[string]Rows{
+	"2025": []Row{
+		Row{"Brave",
+			RowSection{8, 8, 0, 0, 0, 952, 152.6, 812, 160},
+			RowSection{8, 4, 4, 0, 0, 1089, 156, 1131, 157},
+		},
+		Row{"N S-Chargers",
+			RowSection{8, 6, 2, 0, 0, 917, 135.8, 867, 156.6},
+			RowSection{8, 5, 3, 0, 0, 1194, 154.2, 1195, 156},
+		},
+		Row{"Rockets",
+			RowSection{8, 4, 4, 0, 0, 1015, 156.2, 969, 151.8},
+			RowSection{8, 6, 2, 0, 0, 1074, 148.4, 1080, 157.8},
+		},
+		Row{"Invincibles",
+			RowSection{8, 2, 6, 0, 0, 1034, 160, 1091, 148.2},
+			RowSection{8, 6, 2, 0, 0, 1258, 136.4, 1187, 159.6},
+		},
+		Row{"Spirit",
+			RowSection{8, 5, 3, 0, 0, 1031, 152, 955, 152},
+			RowSection{8, 3, 5, 0, 0, 1157, 160, 1101, 138.8},
+		},
+		Row{"Originals",
+			RowSection{8, 4, 4, 0, 0, 851, 152.6, 860, 150.4},
+			RowSection{8, 3, 5, 0, 0, 1052, 156.8, 1019, 142.6},
+		},
+		Row{"Phoenix",
+			RowSection{8, 2, 6, 0, 0, 964, 160, 1102, 154.2},
+			RowSection{8, 3, 5, 0, 0, 1060, 149.2, 1093, 149.4},
+		},
+		Row{"Fire",
+			RowSection{8, 1, 7, 0, 0, 860, 160, 968, 156},
+			RowSection{8, 2, 6, 0, 0, 1156, 157.8, 1234, 157.6},
+		},
+	},
 	"2024": []Row{
 		Row{"Invincibles",
 			RowSection{8, 5, 2, 1, 0, 867, 146.2, 901, 152.8},
@@ -417,7 +451,7 @@ func getRowSections(url string) map[string]RowSection {
 }
 
 func parseNrr(nrr string) (int, float64) {
-	if (nrr == "") {
+	if nrr == "" {
 		return 0, 0
 	}
 
